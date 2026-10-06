@@ -2,11 +2,11 @@
 
 :root {
     --color-main: #3b82f6;
-    --color-bg: #f8fafc;
+    --color-bg: white;
     --color-text: #0f172a;
     --color-subtext: #64748b;
 
-    --color-card: #ffffff;
+    --color-card: #f1eeee;
     --color-border: #e2e8f0;
     --color-highlight: #8b5cf6;
 
