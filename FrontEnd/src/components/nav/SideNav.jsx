@@ -56,8 +56,6 @@ export default function SideNav({ openMenu, setOpenMenu }) {
 
     return (
         <div
-            onMouseEnter={() => setOpenMenu(true)}
-            onMouseLeave={() => setOpenMenu(false)}
             className={`sticky top-0 overflow-hidden
             ${isScrolled
                     ? 'h-dvh'

@@ -1,17 +1,24 @@
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
+
 import Input from '../utils/Input'
 import Button from '../utils/Button'
+import serverName from '../utils/serverName'
 
 export default function SignIn() {
     const [formData, setFormData] = useState({
+        name: '',
         email: '',
         password: '',
+        confirmPassword: ''
     })
     const [formDataError, setFormDataError] = useState({
+        name: '',
         email: '',
-        password: ''
+        password: '',
+        confirmPassword: ''
     })
 
     const handleFormDataChange = (e) => {
@@ -26,23 +33,48 @@ export default function SignIn() {
         }))
     }
 
-    const handleSubmitForm = (e) => {
+    const handleSubmitForm = async (e) => {
         e.preventDefault()
 
-        if (!formData.email || !formData.password) {
+        if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
             setFormDataError({
+                name: formData.name ? '' : 'Please fill name field',
                 email: formData.email ? '' : 'Please fill email field',
-                password: formData.password ? '' : 'Please fill password field'
+                password: formData.password ? '' : 'Please fill password field',
+                confirmPassword: formData.confirmPassword ? '' : 'Please fill confirm password field',
             })
             return
         }
 
-        toast.success(formData.email)
+        if (formData.password !== formData.confirmPassword) {
+            setFormDataError(prev => ({
+                ...prev,
+                confirmPassword: 'Password did not matched'
+            }))
+            return
+        }
+
+
+        await handleSubmission()
 
         setFormData({
+            name: '',
             email: '',
-            password: ''
+            password: '',
+            confirmPassword: ''
         })
+    }
+
+
+    const handleSubmission = async () => {
+        try {
+            const response = await axios.post(serverName + '/registration', formData)
+            console.log(response.data)
+        } catch (error) {
+            toast.warning(error.response?.data?.message || error.message)
+            console.log(error)
+        }
+
     }
 
 
@@ -55,6 +87,14 @@ export default function SignIn() {
                     className='flex flex-col gap-2 '>
                     <Input
                         type={'text'}
+                        name={'name'}
+                        placeholder={'Full name'}
+                        onChange={handleFormDataChange}
+                        value={formData.name}
+                        errorMessage={formDataError.name}
+                    />
+                    <Input
+                        type={'email'}
                         name={'email'}
                         placeholder={'Email'}
                         onChange={handleFormDataChange}
@@ -69,10 +109,18 @@ export default function SignIn() {
                         value={formData.password}
                         errorMessage={formDataError.password}
                     />
+                    <Input
+                        type={'password'}
+                        name={'confirmPassword'}
+                        placeholder={'Confirm password'}
+                        onChange={handleFormDataChange}
+                        value={formData.confirmPassword}
+                        errorMessage={formDataError.confirmPassword}
+                    />
                     <div className='flex flex-col gap-2 p-1'>
                         <Link
                             to={'/sign-in'}
-                            className='text-sm p-1 text-highlight'>
+                            className='text-sm p-1 text-highlight hover:underline'>
                             I have an account.
                         </Link>
                     </div>

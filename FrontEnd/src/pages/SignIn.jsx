@@ -54,7 +54,7 @@ export default function SignIn() {
                     onSubmit={handleSubmitForm}
                     className='flex flex-col gap-2 '>
                     <Input
-                        type={'text'}
+                        type={'email'}
                         name={'email'}
                         placeholder={'Email'}
                         onChange={handleFormDataChange}
@@ -72,10 +72,10 @@ export default function SignIn() {
                     <div className='flex flex-col gap-2 p-1'>
                         <Link
                             to={'/forget-password'}
-                            className='text-sm p-1 text-main'>Forget password?</Link>
+                            className='text-sm p-1 text-main hover:underline'>Forget password?</Link>
                         <Link
                             to={'/sign-up'}
-                            className='text-sm p-1 text-highlight'>
+                            className='text-sm p-1 text-highlight hover:underline'>
                             or Don't have any account?
                         </Link>
                     </div>
