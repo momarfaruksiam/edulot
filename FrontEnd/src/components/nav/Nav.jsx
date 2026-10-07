@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Search from './Search'
+import Search from '../Search'
 import { FaSearch, FaUser } from "react-icons/fa";
 import { RxCross1 } from "react-icons/rx";
 import { RiMenu2Fill } from "react-icons/ri";
@@ -17,7 +17,7 @@ export default function Nav({ setOpenMenu, openMenu }) {
     const menu = [
         { link: '/notifications', title: 'Notifications', icon: <HiBell /> },
         { link: '/messages', title: 'Messages', icon: <HiChatBubbleLeftRight /> },
-        { link: '/profile', title: 'Profile', icon: <HiUser /> },
+        { link: '/sign-in', title: 'Profile', icon: <HiUser /> },
 
     ]
 

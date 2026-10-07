@@ -16,7 +16,7 @@ import {
 } from 'react-icons/hi2'
 import { FaSignOutAlt } from 'react-icons/fa'
 
-export default function SideNav({ openMenu }) {
+export default function SideNav({ openMenu, setOpenMenu }) {
     const [isScrolled, setIsScrolled] = useState(false)
 
     useEffect(() => {
@@ -56,40 +56,44 @@ export default function SideNav({ openMenu }) {
 
     return (
         <div
+            onMouseEnter={() => setOpenMenu(true)}
+            onMouseLeave={() => setOpenMenu(false)}
             className={`sticky top-0 overflow-hidden
             ${isScrolled
                     ? 'h-dvh'
                     : 'max-h-[calc(100dvh-140px)] md:max-h-[calc(100dvh-100px)]'
                 }
             ${openMenu ? 'max-w-60 p-2 pt-8' : 'max-w-0 p-0'}
-            md:max-w-60 md:p-2 md:pt-8`}
+            md:max-w-60 md:p-2 md:pt-8 transition-all duration-300`}
         >
             <div className="h-full w-full overflow-y-auto">
-                <ul className="space-y-1">
+                <ul
+                    className="space-y-1 ">
                     {menu.map((item) => {
                         const isActive = location.pathname === item.link
 
                         return (
-                            <li key={item.link}>
+                            <li
+                                key={item.link}>
                                 <Link
                                     to={item.link}
                                     title={item.title}
-                                    className={`flex items-center gap-3 p-3 rounded-lg text-subtext hover:bg-card hover:text-text whitespace-nowrap ${isActive
+                                    className={`flex items-center p-3 rounded-lg text-subtext hover:bg-card hover:text-text whitespace-nowrap ${isActive
                                         ? 'bg-card text-text'
                                         : 'text-subtext hover:bg-card hover:text-text'
                                         }`}
                                 >
                                     <span className="text-xl">{item.icon}</span>
-                                    <span className={`${openMenu ? 'block' : 'hidden'}`}>
+                                    <span className={`overflow-hidden ${openMenu ? 'max-w-40 ml-3 pr-8' : 'max-w-0'} transition-all duration-300`}>
                                         {item.title}
                                     </span>
                                 </Link>
                             </li>
                         )
                     })}
-                    <li className={`flex items-center gap-3 p-3 mt-8 border-t border-border text-subtext hover:bg-card hover:text-text whitespace-nowrap}`}>
+                    <li className={`flex items-center p-3 mt-8 border-t border-border text-subtext hover:bg-card hover:text-text whitespace-nowrap}`}>
                         <span className="text-xl"><FaSignOutAlt /></span>
-                        <span >
+                        <span className={`overflow-hidden ${openMenu ? 'max-w-40 ml-3 pr-8' : 'max-w-0'} transition-all duration-300`}>
                             Sign Out
                         </span>
                     </li>

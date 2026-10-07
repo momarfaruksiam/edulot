@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Outlet } from 'react-router'
-import Nav from '../components/Nav'
-import LowerNav from '../components/LowerNav'
-import SideNav from '../components/SideNav'
+import Nav from '../components/nav/Nav'
+import LowerNav from '../components/nav/LowerNav'
+import SideNav from '../components/nav/SideNav'
 
 export default function Layout() {
     const [openMenu, setOpenMenu] = useState(false)
@@ -34,9 +34,12 @@ export default function Layout() {
 
             <Nav setOpenMenu={setOpenMenu} openMenu={openMenu} />
 
-            <div className='relative flex-1 flex'>
-                <SideNav openMenu={openMenu} />
-                <div className='relative border-l-2 border-border p-2 flex-1'>
+            <div className={`relative flex-1 flex ${showLowerNav ? 'mb-15 mt-1' : 'mb-0 mt-0'}`}>
+                <SideNav openMenu={openMenu} setOpenMenu={setOpenMenu} />
+                <div className={`relative border-l-2 border-border p-2 flex-1 ${openMenu && 'max-h-dvh overflow-hidden'}`}>
+                    <div
+                        onClick={() => setOpenMenu(false)}
+                        className={`absolute top-0 left-0 right-0 bg-subtext/50 opacity-50 ${openMenu && 'bottom-0'} transition-opacity duration-300`} />
                     <Outlet />
                 </div>
             </div>
