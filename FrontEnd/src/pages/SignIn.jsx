@@ -38,11 +38,6 @@ export default function SignIn() {
         }
 
         toast.success(formData.email)
-
-        setFormData({
-            email: '',
-            password: ''
-        })
     }
 
 
