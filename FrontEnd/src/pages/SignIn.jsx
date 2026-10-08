@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Input from '../utils/Input'
 import Button from '../utils/Button'
+import axios from 'axios'
+import serverName from '../utils/serverName'
 
 export default function SignIn() {
+    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -26,7 +30,7 @@ export default function SignIn() {
         }))
     }
 
-    const handleSubmitForm = (e) => {
+    const handleSubmitForm = async (e) => {
         e.preventDefault()
 
         if (!formData.email || !formData.password) {
@@ -37,9 +41,30 @@ export default function SignIn() {
             return
         }
 
-        toast.success(formData.email)
+        await handleSubmission()
     }
 
+    const handleSubmission = async () => {
+        setLoading(true)
+        try {
+            const response = await axios.post(serverName + '/sign-in', formData)
+            console.log(response.data)
+            toast.success(response.data.message)
+            navigate('/')
+        } catch (error) {
+            toast.warning(error.response?.data?.message || error.message)
+            if (error.response.status === 409)
+                setFormDataError(prev => ({
+                    ...prev,
+                    email: 'This email exists'
+                }))
+            console.log(error)
+        }
+        setLoading(false)
+    }
+
+    if (loading)
+        return <>Loading</>
 
     return (
         <main className='h-full flex items-center justify-center'>

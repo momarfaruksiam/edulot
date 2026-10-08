@@ -9,7 +9,7 @@ import serverName from '../utils/serverName'
 import VerifySignUpUser from '../components/sign/VerifySignUpUser'
 
 export default function SignUp() {
-    const [loading, isLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const [verifyUserWithCode, setVerifyUserCode] = useState(false)
 
@@ -40,7 +40,6 @@ export default function SignUp() {
 
     const handleSubmitForm = async (e) => {
         e.preventDefault()
-        isLoading(true)
 
         if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
             setFormDataError({
@@ -62,11 +61,11 @@ export default function SignUp() {
 
 
         await handleSubmission()
-        isLoading(false)
     }
 
 
     const handleSubmission = async () => {
+        setLoading(true)
         try {
             const response = await axios.post(serverName + '/registration', formData)
             console.log(response.data)
@@ -83,6 +82,7 @@ export default function SignUp() {
             console.log(error)
             setVerifyUserCode(false)
         }
+        setLoading(false)
     }
 
     if (loading)
