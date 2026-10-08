@@ -8,7 +8,7 @@ export default function Home() {
             {user?.name}
             {user?.email}
             {user?.password}
-            {user?.profileImg}
+            <img src={user?.profileImg} alt="" />
         </>
     )
 }

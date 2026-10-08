@@ -9,15 +9,17 @@ import {
     HiBell,
     HiUser,
 } from 'react-icons/hi2'
+import { useUser } from '../../contexts/userContext';
 
 export default function Nav({ setOpenMenu, openMenu }) {
     const [openSearch, setOpenSearch] = useState(false)
+
+    const { user } = useUser()
 
 
     const menu = [
         { link: '/notifications', title: 'Notifications', icon: <HiBell /> },
         { link: '/messages', title: 'Messages', icon: <HiChatBubbleLeftRight /> },
-        { link: '/sign-in', title: 'Profile', icon: <HiUser /> },
 
     ]
 
@@ -59,8 +61,8 @@ export default function Nav({ setOpenMenu, openMenu }) {
                                     to={item.link}
                                     title={item.title}
                                     className={`block rounded-lg p-2 whitespace-nowrap text-2xl transition-colors ${isActive
-                                            ? 'bg-card text-text'
-                                            : 'text-subtext hover:bg-card hover:text-text'
+                                        ? 'bg-card text-text'
+                                        : 'text-subtext hover:bg-card hover:text-text'
                                         }`}
                                 >
                                     {item.icon}
@@ -68,6 +70,25 @@ export default function Nav({ setOpenMenu, openMenu }) {
                             </li>
                         )
                     })}
+
+                    {user?.profileImg ?
+                        <li className='rounded-[50%] overflow-hidden border-2 border-main'>
+                            <Link
+                                to={user.email}
+                                className={`block whitespace-nowrap text-2xl w-8`}
+                            >
+                                <img src={user.profileImg} alt="" />
+                            </Link>
+                        </li> :
+                        <li >
+                            <Link
+                                to={'/sign-in'}
+                                className={`block rounded-lg p-2 whitespace-nowrap text-2xl transition-colors`}
+                            >
+                                <HiUser />
+                            </Link>
+                        </li>
+                    }
                 </ul>
 
             </nav>
