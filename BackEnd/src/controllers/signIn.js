@@ -45,10 +45,7 @@ signIn.post('/', async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'User logged in successfully!',
-            data: {
-                name: user.name,
-                profileImg: user.profileImg,
-            }
+            authToken
         })
 
     } catch (error) {

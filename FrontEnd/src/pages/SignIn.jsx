@@ -47,7 +47,9 @@ export default function SignIn() {
     const handleSubmission = async () => {
         setLoading(true)
         try {
-            const response = await axios.post(serverName + '/sign-in', formData)
+            const response = await axios.post(serverName + '/sign-in', formData, {
+                withCredentials: true
+            })
             console.log(response.data)
             toast.success(response.data.message)
             navigate('/')
