@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router'
+import { Link, useLocation } from 'react-router'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
@@ -15,9 +15,11 @@ import {
     HiBell,
     HiCalendarDays,
     HiChartBar,
-    HiCog6Tooth
+    HiCog6Tooth,
 } from 'react-icons/hi2'
-import { FaSignOutAlt } from 'react-icons/fa'
+
+
+import { FaSignOutAlt, FaSignInAlt } from 'react-icons/fa'
 
 import serverName from '../../utils/serverName'
 import { useUser } from '../../contexts/userContext'
@@ -63,6 +65,9 @@ export default function SideNav({ openMenu, setOpenMenu }) {
 
     return (
         <div
+            onClick={() => {
+                setOpenMenu(false)
+            }}
             className={`sticky top-0 overflow-hidden
             ${isScrolled
                     ? 'h-dvh'
@@ -96,26 +101,36 @@ export default function SideNav({ openMenu, setOpenMenu }) {
                             </li>
                         )
                     })}
-                    <li
-                        onClick={async () => {
-                            try {
-                                const response = await axios.get(serverName + '/sign-out', {
-                                    withCredentials: true
-                                })
-                                toast.success(response.data.message)
-                                await getUser()
-                            } catch (error) {
-                                console.log(error)
-                                toast.warning(error?.message)
-                            }
-                        }}
-                        className={`flex items-center p-3 mt-8 border-t border-border text-subtext hover:bg-card hover:text-text whitespace-nowrap}`}>
-                        <span className="text-xl"><FaSignOutAlt /></span>
-                        <span
-                            className={`overflow-hidden ${openMenu ? 'max-w-40 ml-3 pr-8' : 'max-w-0'} transition-all duration-300`}>
-                            Sign Out
-                        </span>
-                    </li>
+                    {user ?
+                        <li
+                            onClick={async () => {
+                                try {
+                                    const response = await axios.get(serverName + '/sign-out', {
+                                        withCredentials: true
+                                    })
+                                    toast.success(response.data.message)
+                                    await getUser()
+                                } catch (error) {
+                                    console.log(error)
+                                    toast.warning(error?.message)
+                                }
+                            }}
+                            className={`flex items-center p-3 mt-8 border-t border-border text-subtext hover:bg-card hover:text-text whitespace-nowrap}`}>
+                            <span className="text-xl"><FaSignOutAlt /></span>
+                            <span
+                                className={`overflow-hidden ${openMenu ? 'max-w-40 ml-3 pr-8' : 'max-w-0'} transition-all duration-300`}>
+                                Sign Out
+                            </span>
+                        </li> :
+                        <Link
+                            to={'/sign-in'}
+                            className={`flex items-center p-2 mt-8 border-t border-border rounded-lg text-subtext hover:bg-card hover:text-text whitespace-nowrap}`}>
+                            <FaSignInAlt className='w-6 h-auto' />
+                            <span
+                                className={`overflow-hidden ${openMenu ? 'max-w-40 ml-3 pr-8' : 'max-w-0 hidden'} transition-all duration-300`}>
+                                Sign in
+                            </span>
+                        </Link>}
                 </ul>
             </div>
         </div>

@@ -34,7 +34,7 @@ export default function Layout() {
 
             <Nav setOpenMenu={setOpenMenu} openMenu={openMenu} />
 
-            <div className={`relative flex-1 flex ${showLowerNav ? 'mb-15 mt-1' : 'mb-0 mt-0'}`}>
+            <div className={`relative flex-1 flex md:mb-1 ${showLowerNav ? 'mb-15 mt-1' : 'mb-0 mt-0'}`}>
                 <SideNav openMenu={openMenu} setOpenMenu={setOpenMenu} />
                 <div className={`relative border-l-2 border-border p-2 flex-1 ${openMenu && 'max-h-dvh overflow-hidden'}`}>
                     <div
@@ -45,11 +45,11 @@ export default function Layout() {
             </div>
 
             <ul
-                className={`flex items-center justify-center gap-4 text-2xl font-medium text-subtext select-none bg-bg z-10
+                className={`fixed bottom-0 left-0 w-full p-2 bg-bg z-30 md:hidden
+                flex items-center justify-center gap-4 text-2xl font-medium text-subtext select-none
                 shadow-[0_-4px_6px_-1px_color-mix(in_srgb,var(--color-text)_20%,transparent)] 
-                fixed bottom-0 left-0 w-full p-2 md:hidden
-                transition-transform duration-300 ease-in-out
-                ${showLowerNav ? 'translate-y-0' : 'translate-y-full'}`}
+                transition-transform duration-300 ease-in-out ${showLowerNav ? 'translate-y-0' : 'translate-y-full'
+                    }`}
             >
                 <LowerNav />
             </ul>
