@@ -5,9 +5,11 @@ import Input from '../utils/Input'
 import Button from '../utils/Button'
 import axios from 'axios'
 import serverName from '../utils/serverName'
+import { useUser } from '../contexts/userContext'
 
 export default function SignIn() {
     const [loading, setLoading] = useState(false)
+    const { getUser } = useUser()
     const navigate = useNavigate()
     const [formData, setFormData] = useState({
         email: '',
@@ -52,6 +54,7 @@ export default function SignIn() {
             })
             console.log(response.data)
             toast.success(response.data.message)
+            await getUser()
             navigate('/')
         } catch (error) {
             toast.warning(error.response?.data?.message || error.message)

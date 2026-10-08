@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router'
+import { Link, useLocation, useNavigate } from 'react-router'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+
 import {
     HiHome,
     HiUserGroup,
@@ -16,8 +19,12 @@ import {
 } from 'react-icons/hi2'
 import { FaSignOutAlt } from 'react-icons/fa'
 
+import serverName from '../../utils/serverName'
+import { useUser } from '../../contexts/userContext'
+
 export default function SideNav({ openMenu, setOpenMenu }) {
     const [isScrolled, setIsScrolled] = useState(false)
+    const { user, getUser } = useUser()
 
     useEffect(() => {
         const handleScroll = () => {
@@ -39,17 +46,17 @@ export default function SideNav({ openMenu, setOpenMenu }) {
     const menu = [
         { link: '/', title: 'Home', icon: <HiHome /> },
         { link: '/courses', title: 'Courses', icon: <HiAcademicCap /> },
-        { link: '/connections', title: 'Connections', icon: <HiUserGroup /> },
-        { link: '/messages', title: 'Messages', icon: <HiChatBubbleLeftRight /> },
-        { link: '/notifications', title: 'Notifications', icon: <HiBell /> },
-        { link: '/institutions', title: 'Institutions', icon: <HiBuildingOffice2 /> },
+        user && { link: '/connections', title: 'Connections', icon: <HiUserGroup /> },
+        user && { link: '/messages', title: 'Messages', icon: <HiChatBubbleLeftRight /> },
+        user && { link: '/notifications', title: 'Notifications', icon: <HiBell /> },
+        user && { link: '/institutions', title: 'Institutions', icon: <HiBuildingOffice2 /> },
         { link: '/live-class', title: 'Live Class', icon: <HiVideoCamera /> },
-        { link: '/notes', title: 'Notes', icon: <HiDocumentText /> },
-        { link: '/saved', title: 'Saved', icon: <HiBookmark /> },
-        { link: '/schedule', title: 'Schedule', icon: <HiCalendarDays /> },
-        { link: '/analytics', title: 'Analytics', icon: <HiChartBar /> },
+        user && { link: '/notes', title: 'Notes', icon: <HiDocumentText /> },
+        user && { link: '/saved', title: 'Saved', icon: <HiBookmark /> },
+        user && { link: '/schedule', title: 'Schedule', icon: <HiCalendarDays /> },
+        user && { link: '/analytics', title: 'Analytics', icon: <HiChartBar /> },
         { link: '/settings', title: 'Settings', icon: <HiCog6Tooth /> },
-    ]
+    ].filter(Boolean)
 
     const location = useLocation()
 
@@ -89,9 +96,23 @@ export default function SideNav({ openMenu, setOpenMenu }) {
                             </li>
                         )
                     })}
-                    <li className={`flex items-center p-3 mt-8 border-t border-border text-subtext hover:bg-card hover:text-text whitespace-nowrap}`}>
+                    <li
+                        onClick={async () => {
+                            try {
+                                const response = await axios.get(serverName + '/sign-out', {
+                                    withCredentials: true
+                                })
+                                toast.success(response.data.message)
+                                await getUser()
+                            } catch (error) {
+                                console.log(error)
+                                toast.warning(error?.message)
+                            }
+                        }}
+                        className={`flex items-center p-3 mt-8 border-t border-border text-subtext hover:bg-card hover:text-text whitespace-nowrap}`}>
                         <span className="text-xl"><FaSignOutAlt /></span>
-                        <span className={`overflow-hidden ${openMenu ? 'max-w-40 ml-3 pr-8' : 'max-w-0'} transition-all duration-300`}>
+                        <span
+                            className={`overflow-hidden ${openMenu ? 'max-w-40 ml-3 pr-8' : 'max-w-0'} transition-all duration-300`}>
                             Sign Out
                         </span>
                     </li>

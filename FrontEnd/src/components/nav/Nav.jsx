@@ -18,10 +18,10 @@ export default function Nav({ setOpenMenu, openMenu }) {
 
 
     const menu = [
-        { link: '/notifications', title: 'Notifications', icon: <HiBell /> },
-        { link: '/messages', title: 'Messages', icon: <HiChatBubbleLeftRight /> },
+        user && { link: '/notifications', title: 'Notifications', icon: <HiBell /> },
+        user && { link: '/messages', title: 'Messages', icon: <HiChatBubbleLeftRight /> },
 
-    ]
+    ].filter(Boolean)
 
     const location = useLocation()
 
@@ -90,7 +90,6 @@ export default function Nav({ setOpenMenu, openMenu }) {
                         </li>
                     }
                 </ul>
-
             </nav>
         </header>
     )

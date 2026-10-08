@@ -8,16 +8,18 @@ import {
     HiVideoCamera,
     HiDocumentText,
 } from 'react-icons/hi2'
+import { useUser } from '../../contexts/userContext'
 
 export default function LowerNav() {
+    const{user} = useUser()
     const menu = [
         { link: '/', title: 'Home', icon: <HiHome /> },
-        { link: '/connections', title: 'Connections', icon: <HiUserGroup /> },
+        user && { link: '/connections', title: 'Connections', icon: <HiUserGroup /> },
         { link: '/courses', title: 'Courses', icon: <HiAcademicCap /> },
-        { link: '/institutions', title: 'Institutions', icon: <HiBuildingOffice2 /> },
+        user && { link: '/institutions', title: 'Institutions', icon: <HiBuildingOffice2 /> },
         { link: '/live-class', title: 'Live Class', icon: <HiVideoCamera /> },
-        { link: '/notes', title: 'Notes', icon: <HiDocumentText /> },
-    ]
+        user && { link: '/notes', title: 'Notes', icon: <HiDocumentText /> },
+    ].filter(Boolean)
 
     const location = useLocation()
 
