@@ -74,20 +74,29 @@ export default function Nav({ setOpenMenu, openMenu }) {
                     {user?.profileImg ?
                         <li className='rounded-[50%] overflow-hidden border-2 border-main'>
                             <Link
-                                to={user.email}
+                                to={'/@' + user.username}
                                 className={`block whitespace-nowrap text-2xl w-8`}
                             >
                                 <img src={user.profileImg} alt="" />
                             </Link>
                         </li> :
-                        <li >
-                            <Link
-                                to={'/sign-in'}
-                                className={`block rounded-lg p-2 whitespace-nowrap text-2xl transition-colors`}
-                            >
-                                <HiUser />
-                            </Link>
-                        </li>
+                        user ?
+                            <li >
+                                <Link
+                                    to={'/@' + user.username}
+                                    className={`block rounded-lg p-2 whitespace-nowrap text-2xl transition-colors`}
+                                >
+                                    <HiUser />
+                                </Link>
+                            </li> :
+                            <li >
+                                <Link
+                                    to={'/sign-in'}
+                                    className={`block rounded-lg p-2 whitespace-nowrap text-2xl transition-colors`}
+                                >
+                                    <HiUser />
+                                </Link>
+                            </li>
                     }
                 </ul>
             </nav>

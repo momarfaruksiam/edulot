@@ -6,6 +6,7 @@ import Layout from '../layouts/Layout'
 import SignIn from '../pages/SignIn'
 import SignUp from '../pages/SignUp'
 import AuthGuard from '../components/AuthGuard'
+import Profile from '../pages/Profile'
 
 const router = createBrowserRouter([
     {
@@ -15,10 +16,17 @@ const router = createBrowserRouter([
             { index: true, element: <Home /> },
             { path: 'watch', element: <Watch /> },
             {
-                path: 'sign-in', element: <AuthGuard
-                    unauthComponent={<SignIn />} />
+                path: 'sign-in',
+                element: <AuthGuard unauthComponent={<SignIn />} />
             },
-            { path: 'sign-up', element: <SignUp /> },
+            {
+                path: 'sign-up',
+                element: <AuthGuard unauthComponent={<SignUp />} />
+            },
+            {
+                path: ':usernamePeram',
+                element: <Profile />
+            },
             { path: '*', element: <div>404 Not Found</div> }
         ]
     }

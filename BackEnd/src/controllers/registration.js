@@ -41,8 +41,18 @@ registration.post('/', async (req, res) => {
             html: regVerification(regVerifyCode)
         })
 
+        let username = email.split('@')[0]
+        let count = 1
+
+        while (await userModel.findOne({ username })) {
+            username = email.split('@')[0] + count
+            count++
+        }
+
+
         await userModel.create({
             name,
+            username,
             email,
             password,
             regVerifyCode
