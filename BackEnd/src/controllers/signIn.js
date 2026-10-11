@@ -3,6 +3,14 @@ const jwt = require('jsonwebtoken')
 
 const signIn = require('express').Router()
 
+
+signIn.get('/', (req, res) => {
+    return res.status(404).json({
+        success: true,
+        message: 'Found me'
+    })
+})
+
 signIn.post('/', async (req, res) => {
     const { email, password } = req.body
 

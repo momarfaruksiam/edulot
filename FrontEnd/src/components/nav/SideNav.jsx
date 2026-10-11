@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router'
+import { Link, useLocation, useNavigate } from 'react-router'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
@@ -27,6 +27,8 @@ import { useUser } from '../../contexts/userContext'
 export default function SideNav({ openMenu, setOpenMenu }) {
     const [isScrolled, setIsScrolled] = useState(false)
     const { user, getUser } = useUser()
+    const navigate = useNavigate()
+
 
     useEffect(() => {
         const handleScroll = () => {
@@ -110,6 +112,7 @@ export default function SideNav({ openMenu, setOpenMenu }) {
                                     })
                                     toast.success(response.data.message)
                                     await getUser()
+                                    navigate('/')
                                 } catch (error) {
                                     console.log(error)
                                     toast.warning(error?.message)

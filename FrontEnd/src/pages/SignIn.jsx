@@ -64,8 +64,9 @@ export default function SignIn() {
                     email: 'This email exists'
                 }))
             console.log(error)
+        } finally {
+            setLoading(false)
         }
-        setLoading(false)
     }
 
     if (loading)

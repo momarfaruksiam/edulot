@@ -13,11 +13,11 @@ export default function ProfileHeader({ resUser }) {
             <div className='flex items-center md:items-start justify-center md:justify-start gap-2 md:gap-4 mx-auto'>
                 <div>
                     <div
-                        className='overflow-hidden flex items-center h-30 md:h-50 w-30 md:w-50 rounded-[50%] bg-main p-1'>
+                        className='overflow-hidden flex items-center h-30 md:h-50 w-30 md:w-50 rounded-xl bg-main p-1'>
                         <img
                             src={resUser.profileImg}
                             alt=""
-                            className="h-full w-full object-cover border-2 border-bg rounded-[50%]"
+                            className="h-full w-full object-cover border-2 border-bg rounded-xl"
                         />
                     </div>
                 </div>
@@ -42,7 +42,8 @@ export default function ProfileHeader({ resUser }) {
             {/* this div will be changed */}
             <div className='flex items-center gap-2 flex-1 md:max-w-100 md:ml-auto'>
                 <button className='border rounded-2xl p-2 w-full font-bold text-main bg-card block'>Dashboard</button>
-                <button className='border rounded-2xl p-2 w-full min-w-20 font-bold text-bg bg-main block'>Edit</button>
+                <button className='border rounded-2xl p-2 w-full min-w-20 font-bold text-bg bg-info block'>More</button>
+                <button className='border rounded-2xl p-2 min-w-20 font-bold text-bg bg-main block'>Edit</button>
             </div>
         </section>
     )
