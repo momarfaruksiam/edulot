@@ -6,14 +6,6 @@ export default function ProfilePost({ resUser }) {
     return (
         <section className='m-4 my-10 p-4 max-w-150 bg-card border-2 border-border rounded-lg shadow-sm'>
             <div className='flex flex-wrap justify-between items-center'>
-                <div className='flex gap-3 items-center font-semibold'>
-                    <img
-                        className='overflow-hidden rounded-full h-10 w-10 object-cover'
-                        src={resUser?.profileImg || 'https://via.placeholder.com/150'}
-                        alt={resUser?.name || 'User'}
-                    />
-                    <h2>{resUser?.name}</h2>
-                </div>
                 <div className='w-full flex gap-2'>
                     <button
                         type="button"

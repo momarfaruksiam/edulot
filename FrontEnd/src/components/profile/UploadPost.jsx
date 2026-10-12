@@ -1,9 +1,20 @@
 import React, { useRef, useState } from 'react'
 import { FaImages, FaPoll, FaVideo } from "react-icons/fa"
 import { toast } from 'react-toastify'
+import axios from 'axios'
+
+
+import cloudServerName from '../../utils/cloudServerName'
 
 export default function UploadPost({ resUser }) {
     const textareaRef = useRef(null)
+
+    const imageRef = useRef(null)
+    const videoRef = useRef(null)
+
+    const formData = new FormData()
+
+    const [fileInfo, setFileInfo] = useState('')
 
     const handleInput = (e) => {
         const textarea = textareaRef.current
@@ -21,6 +32,43 @@ export default function UploadPost({ resUser }) {
         date: '',
         time: ''
     })
+
+
+    const handleImgUpload = async (e) => {
+        const file = e.target.files?.[0]
+
+        if (!file) return
+
+        const image = file.type.startsWith('image/')
+        const video = file.type.startsWith('video/')
+
+
+        if (!image && !video) {
+            e.target.value = ''
+            toast.error('Please select video or image!')
+            return
+        }
+
+        formData.append('media', file)
+
+        setFileInfo({
+            file,
+            url: URL.createObjectURL(file),
+            type: image ? 'image' : video ? 'video' : 'Error',
+            loading: false
+        })
+
+        try {
+            const response = await axios.post(cloudServerName + '/upload-media', formData, {
+                withCredentials: true
+            })
+
+            toast.success(response.data.message)
+        } catch (error) {
+            toast.error(error?.response?.message)
+            console.log(error)
+        }
+    }
 
     const handlePost = (e) => {
         e.preventDefault()
@@ -45,31 +93,62 @@ export default function UploadPost({ resUser }) {
                 placeholder={`Description`}
                 className='w-full bg-transparent resize-none overflow-y-auto max-h-48 outline-none text-text placeholder:text-subtext'
             />
-            <div className='my-4 w-full overflow-hidden'>
-                <div
-                    className='w-full max-h-100 flex justify-center'
-                >
-                    <img
-                        src={resUser.coverImg}
-                        alt='Post preview'
-                        className='w-full h-auto max-h-100 object-contain'
-                    />
+            {fileInfo && (
+                <div className="my-4 w-full overflow-hidden">
+                    <div className="w-full max-h-100 flex justify-center">
+                        {fileInfo.loading ? (
+                            'Loading...'
+                        ) : fileInfo.type === 'image' ? (
+                            <img
+                                src={fileInfo.url}
+                                alt="Post preview"
+                                className="w-full h-auto max-h-100 object-contain"
+                            />
+                        ) : (
+                            <video
+                                src={fileInfo.url}
+                                controls
+                                className="w-full h-auto max-h-100 object-contain"
+                            />
+                        )}
+                    </div>
                 </div>
+            )}
+            <div className='w-full'>
+                <input
+                    type="file"
+                    accept="image/*"
+                    ref={imageRef}
+                    hidden
+                    onChange={handleImgUpload}
+                />
+
+                <input
+                    type="file"
+                    accept="video/*"
+                    ref={videoRef}
+                    hidden
+                    onChange={handleImgUpload}
+                />
+                <ul className='flex items-center flex-wrap gap-2'>
+                    <li
+                        onClick={() => imageRef.current.click()}
+                        className='flex gap-2 p-1 px-2 rounded-lg items-center font-semibold border-2 border-border text-text/80'>
+                        <FaImages />
+                        <span>Image</span>
+                    </li>
+                    <li
+                        onClick={() => videoRef.current.click()}
+                        className='flex gap-2 p-1 px-2 rounded-lg items-center font-semibold border-2 border-border text-text/80'>
+                        <FaVideo />
+                        <span>Video</span>
+                    </li>
+                    <li className='flex gap-2 p-1 px-2 rounded-lg items-center font-semibold border-2 border-border text-text/80'>
+                        <FaPoll />
+                        <span>Poll</span>
+                    </li>
+                </ul>
             </div>
-            <ul className='flex items-center flex-wrap gap-2 w-full'>
-                <li className='flex gap-2 p-1 px-2 rounded-lg items-center font-semibold border-2 border-border text-text/80'>
-                    <FaImages />
-                    <span>Image</span>
-                </li>
-                <li className='flex gap-2 p-1 px-2 rounded-lg items-center font-semibold border-2 border-border text-text/80'>
-                    <FaVideo />
-                    <span>Video</span>
-                </li>
-                <li className='flex gap-2 p-1 px-2 rounded-lg items-center font-semibold border-2 border-border text-text/80'>
-                    <FaPoll />
-                    <span>Poll</span>
-                </li>
-            </ul>
             <div className='w-full pt-2 flex flex-col gap-2'>
                 <h3 className='text-sm font-semibold text-subtext'>Choose time to schedule this post</h3>
                 <div className='flex gap-3 items-center flex-wrap'>
