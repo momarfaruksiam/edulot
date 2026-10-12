@@ -49,14 +49,15 @@ export default function UploadPost({ resUser }) {
             return
         }
 
-        formData.append('media', file)
-
+        
         setFileInfo({
             file,
             url: URL.createObjectURL(file),
             type: image ? 'image' : video ? 'video' : 'Error',
             loading: false
         })
+        
+        formData.append('media', file)
 
         try {
             const response = await axios.post(cloudServerName + '/upload-media', formData, {
@@ -133,17 +134,17 @@ export default function UploadPost({ resUser }) {
                 <ul className='flex items-center flex-wrap gap-2'>
                     <li
                         onClick={() => imageRef.current.click()}
-                        className='flex gap-2 p-1 px-2 rounded-lg items-center font-semibold border-2 border-border text-text/80'>
+                        className='hover:bg-subtext/20 flex gap-2 p-1 px-2 rounded-lg items-center font-semibold border-2 border-border text-text/80'>
                         <FaImages />
                         <span>Image</span>
                     </li>
                     <li
                         onClick={() => videoRef.current.click()}
-                        className='flex gap-2 p-1 px-2 rounded-lg items-center font-semibold border-2 border-border text-text/80'>
+                        className='hover:bg-subtext/20 flex gap-2 p-1 px-2 rounded-lg items-center font-semibold border-2 border-border text-text/80'>
                         <FaVideo />
                         <span>Video</span>
                     </li>
-                    <li className='flex gap-2 p-1 px-2 rounded-lg items-center font-semibold border-2 border-border text-text/80'>
+                    <li className='hover:bg-subtext/20 flex gap-2 p-1 px-2 rounded-lg items-center font-semibold border-2 border-border text-text/80'>
                         <FaPoll />
                         <span>Poll</span>
                     </li>

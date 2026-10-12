@@ -38,7 +38,7 @@ signIn.post('/', async (req, res) => {
 
         const authToken = jwt.sign(
             {
-                id: user._id,
+                id: user._id.toString(),
                 email: user.email
             },
             process.env.JWT_SECRET_KEY,
@@ -48,6 +48,13 @@ signIn.post('/', async (req, res) => {
         )
 
         res.cookie('authToken', authToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'lax',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+
+        res.cookie('me', user._id, {
             httpOnly: true,
             secure: false,
             sameSite: 'lax',
