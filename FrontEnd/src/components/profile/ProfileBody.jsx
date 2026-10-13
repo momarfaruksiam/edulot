@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
+import BodyPost from './BodyPost'
 
-export default function ProfileBody(resUser) {
+export default function ProfileBody({ resUser }) {
 
     const [profileBody, setProfileBody] = useState([
         {
@@ -10,7 +11,7 @@ export default function ProfileBody(resUser) {
         },
         {
             title: 'Posts',
-            component: <>Posts Content</>,
+            component: <BodyPost resUser={resUser} />,
             isactive: false,
         },
         {

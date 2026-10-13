@@ -5,6 +5,7 @@ import axios from 'axios'
 
 
 import cloudServerName from '../../utils/cloudServerName'
+import serverName from '../../utils/serverName'
 
 export default function UploadPost({ resUser }) {
     const textareaRef = useRef(null)
@@ -12,9 +13,16 @@ export default function UploadPost({ resUser }) {
     const imageRef = useRef(null)
     const videoRef = useRef(null)
 
-    const formData = new FormData()
+    const formImage = new FormData()
 
     const [fileInfo, setFileInfo] = useState('')
+
+    const [formData, setFormData] = useState({
+        title: '',
+        description: '',
+        fileUrl: '',
+        postDate: '',
+    })
 
     const handleInput = (e) => {
         const textarea = textareaRef.current
@@ -49,31 +57,45 @@ export default function UploadPost({ resUser }) {
             return
         }
 
-        
+
         setFileInfo({
             file,
             url: URL.createObjectURL(file),
             type: image ? 'image' : video ? 'video' : 'Error',
             loading: false
         })
-        
-        formData.append('media', file)
+
+        formImage.append('media', file)
 
         try {
-            const response = await axios.post(cloudServerName + '/upload-media', formData, {
+            const response = await axios.post(cloudServerName + '/upload-media', formImage, {
                 withCredentials: true
             })
-
-            toast.success(response.data.message)
+            console.log(response.data.fileUrl)
+            setFormData(prev => ({
+                ...prev,
+                fileUrl: response.data.fileUrl
+            }))
         } catch (error) {
             toast.error(error?.response?.message)
             console.log(error)
         }
     }
 
-    const handlePost = (e) => {
+    const handlePost = async (e) => {
         e.preventDefault()
-        toast.success('clicked')
+        console.log(formData)
+
+        try {
+            const response = await axios.post(serverName + '/upload-post', formData, {
+                withCredentials: true
+            })
+            console.log(response)
+            toast.success(response.data.message)
+        } catch (error) {
+            console.log(error)
+            toast.error(error?.response?.message)
+        }
     }
 
     return (
@@ -84,6 +106,10 @@ export default function UploadPost({ resUser }) {
                 ref={textareaRef}
                 onInput={handleInput}
                 rows={1}
+                onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    title: e.target.value
+                }))}
                 placeholder={`Write the title`}
                 className='w-full bg-transparent resize-none overflow-y-auto max-h-48 outline-none text-text font-semibold placeholder:text-subtext'
             />
@@ -91,6 +117,10 @@ export default function UploadPost({ resUser }) {
                 ref={textareaRef}
                 onInput={handleInput}
                 rows={1}
+                onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    description: e.target.value
+                }))}
                 placeholder={`Description`}
                 className='w-full bg-transparent resize-none overflow-y-auto max-h-48 outline-none text-text placeholder:text-subtext'
             />
@@ -161,7 +191,13 @@ export default function UploadPost({ resUser }) {
                         }}
                         type={changeDateType ? "date" : 'text'}
                         placeholder='Date'
-                        onChange={(e) => setTime({ ...time, date: e.target.value })}
+                        onChange={(e) => {
+                            setTime({ ...time, date: e.target.value })
+                            setFormData(prev => ({
+                                ...prev,
+                                postDate: time.date + 'T' + time.time
+                            }))
+                        }}
                         value={time.date}
                         className='p-2 border-2 border-border rounded-lg bg-transparent font-semibold text-text outline-none'
                     />
@@ -173,7 +209,13 @@ export default function UploadPost({ resUser }) {
                         }}
                         type={changeTimeType ? "time" : 'text'}
                         placeholder='Time'
-                        onChange={(e) => setTime({ ...time, time: e.target.value })}
+                        onChange={(e) => {
+                            setTime({ ...time, time: e.target.value })
+                            setFormData(prev => ({
+                                ...prev,
+                                postDate: time.date + 'T' + e.target.value
+                            }))
+                        }}
                         value={time.time}
                         className='p-2 border-2 border-border rounded-lg bg-transparent font-semibold text-text outline-none'
                     />

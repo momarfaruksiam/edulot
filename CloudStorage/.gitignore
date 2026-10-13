@@ -21,3 +21,9 @@ Thumbs.db
 .idea/
 
 coverage/
+
+# Uploaded user files
+files/
+uploads/
+images/
+videos/

@@ -2,24 +2,14 @@ const uploadMedia = require('express').Router()
 const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
-const jwt = require('jsonwebtoken')
 
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const { authToken } = req.cookies
 
-        const decoded = jwt.verify(
-            authToken,
-            process.env.JWT_SECRET_KEY
-        )
-
-        const userId = decoded.id
+        const userId = req.user.id
 
         console.log('User ID:', userId)
-
-        if (!authToken || !userId)
-            return cb(new Error('Invalid user'))
 
         const folder = file.mimetype.startsWith('image/')
             ? 'images'
@@ -59,10 +49,19 @@ uploadMedia.post('/', upload.single('media'), (req, res) => {
 
     console.log(file)
 
+
+    const folder = file.mimetype.startsWith('image/')
+        ? 'images'
+        : file.mimetype.startsWith('video/')
+            ? 'videos'
+            : 'files'
+
+    const fileUrl = `${process.env.SERVER_NAME}/api/v1/get-file?u=${encodeURIComponent(req.user.id)}&fo=${folder}&fi=${encodeURIComponent(file.filename)}`
+
     res.status(200).json({
         success: true,
         message: 'Media received successfully',
-        file
+        fileUrl
     })
 })
 
